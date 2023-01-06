@@ -11,6 +11,9 @@ class SettingData:
         self.cur.execute(query_setting)
         self.conn.commit()
 
+    def close(self):
+        self.conn.close()
+
     def delete_data(self):
         self.cur.execute("""DELETE FROM settings;""")
         self.conn.commit()
@@ -27,7 +30,6 @@ class SettingData:
             pass
         self.cur.execute("""INSERT INTO settings(host, port) VALUES(?, ?);""", args)
         self.conn.commit()
-
 
 
 if __name__ == '__main__':

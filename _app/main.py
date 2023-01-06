@@ -1,3 +1,5 @@
+import json
+
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.uix.menu import MDDropdownMenu
@@ -7,12 +9,14 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 import menu
 from settings_db import SettingData
+from _client.client import SocketClient
 
 
 class TitleScreen(MDScreen):
     """класс главного окна"""
     menu = menu.MENU_RUS
     connect_status = False
+    db = SettingData()
 
     def show_password(self):
         pass
@@ -23,6 +27,28 @@ class TitleScreen(MDScreen):
         else:
             return "lan-disconnect"
 
+    def form_user_login(self, *args):
+        print(args)
+        if "" not in args:
+            data = self.db.get_data()
+            message = json.dumps({"login": {"email": args[0], "password": args[1]}})
+            print(type(message))
+            print(message)
+            client = SocketClient()
+            connect = client.connect_server(data[1], int(data[2]))
+            if connect[0]["message"] == 200:
+                client.message(message)
+                response = client.get_response()
+                print(response, "<<<<<<<<<<<")
+                TitleScreen.connect_status = True
+                self.ids['icon1'].icon = 'lan-connect'
+                self.ids['icon1'].color = 'green'
+            else:
+                self.ids['icon1'].icon = 'lan-disconnect'
+                self.ids['icon1'].color = 'red'
+        else:
+            self.ids['text1'].hint_text = 'Вы ничего не ввели'
+            self.ids['text2'].hint_text = 'Вы ничего не ввели'
 
 class SettingScreen(MDScreen):
     """класс окна настроек"""
