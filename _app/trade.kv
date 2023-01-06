@@ -1,1 +1,122 @@
-#:kivy2.1.0
+#:kivy 2.1.0
+
+<TitleScreen>
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: 30, 0, 30, 0
+
+        MDAnchorLayout:
+            anchor_x: "center"
+            anchor_y: "top"
+            size_hint: 0.2, 0.2
+            MDIcon:
+                icon: root.connect_icon()
+                color: "white"
+        MDAnchorLayout:
+            anchor_x: "center"
+            anchor_y: "top"
+
+            MDCard:
+                padding: 4
+                spacing:10
+                size_hint: None, None
+                size: "300dp", "180dp"
+                MDGridLayout:
+                    cols: 1
+                    rows: 4
+
+                    MDTextField:
+                        size_hint:None, None
+                        size: "260dp", "65dp"
+                        id: "text1"
+                        hint_text: "Введите email"
+                        helper_text: "Email"
+
+                    MDTextField:
+                        id: "text2"
+                        hint_text: "Введите пароль"
+                        helper_text: "Пароль"
+                        password: True
+#                    MDIconButton:
+#                        id: show_password
+#                        icon: "eye-off-outline"
+#                        color: "white"
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        GridLayout:
+                            cols: 2
+                            spacing:5
+                            MDRectangleFlatButton:
+                                size_hint: 0.5, 0.6
+                                text: "Вход"
+                                theme_text_color: "Custom"
+                                text_color: "white"
+                                line_color: "lightblue"
+
+                            MDRectangleFlatButton:
+                                size_hint: 0.5, 0.6
+                                text: "Регистрация"
+                                theme_text_color: "Custom"
+                                text_color: "white"
+                                line_color: "lightblue"
+    MDBottomAppBar:
+
+        MDTopAppBar:
+            title: root.menu['title_screen'][0]
+            icon: "cog"
+            type: "bottom"
+            left_action_items: [["menu", lambda x: x]]
+            on_action_button: app.root.current = 'settings'
+
+
+<RegistrationScreen>
+    MDGridLayout:
+        padding: 40, 20, 40, 20
+        spacing: 10
+        cols: 2
+        MDLabel:
+            text: "Хост"
+        MDTextField:
+            id: text3
+            hint_text: "hello"
+
+<SettingScreen>
+    MDBoxLayout:
+        orientation: "horizontal"
+        MDAnchorLayout:
+        MDAnchorLayout:
+            anchor_y: "center"
+            anchor_x: "center"
+            size_hint_x: 0.8
+            MDCard:
+                padding: 4
+                spacing:10
+                size_hint: None, None
+                size: "300dp", "180dp"
+                MDGridLayout:
+                    padding: 40, 20, 40, 20
+                    spacing: 10
+                    cols:2
+                    MDLabel:
+                        size_hint: None, None
+                        size: "40dp", "15dp"
+                        text: "Хост"
+                    MDTextField:
+                        size_hint: None, None
+                        size: "150dp", "15dp"
+                        id: text4
+                        hint_text: root.load_settings()[1]
+                        helper_text: "Введите ip "
+                    MDLabel:
+                        text: "Порт"
+                    MDTextField:
+                        id: text5
+                        hint_text: root.load_settings()[2]
+                        helper_text: "Введите порт "
+                    MDRectangleFlatButton:
+                        text: "Назад"
+                        on_press: app.root.current = 'title'
+                    MDRectangleFlatButton:
+                        text: "Сохранить"
+                        on_press: root.save_settings(text4.text, text5.text)
+        MDAnchorLayout
